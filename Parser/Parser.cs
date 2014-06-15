@@ -19,6 +19,7 @@ public class Parser
     {
         t = new Tokenizer(s);
         lookahead = t.nextToken();
+
         return E();
     }
 
@@ -28,7 +29,7 @@ public class Parser
     }
     E1 E1()
     {
-        
+
         if (lookahead.Type == (int)type.PLUS)
         {
             Match(type.PLUS);
@@ -44,7 +45,7 @@ public class Parser
     {
         return new T(F(), T1());
     }
-    
+
     T1 T1()
     {
         if (lookahead.Type == (int)type.TIMES)
@@ -65,18 +66,18 @@ public class Parser
             Match(type.OPEN_PAR);
             e = E();
             Match(type.CLOSE_PAR);
-            return new F(null, e);
+            return new F(e);
 
         }
 
         String value = lookahead.Value;
-            Match(type.ID);
-            return new F(value, null);
-        
+        Match(type.ID);
+        return new F(value);
+
     }
 
-   
-    
+
+
     protected void Match(type t)
     {
         Debug.Assert(lookahead.Type == (int)t, "Syntax error");

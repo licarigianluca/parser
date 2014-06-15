@@ -39,6 +39,7 @@
     <Compile Include="E1.cs" />
     <Compile Include="F.cs" />
     <Compile Include="OP.cs" />
+    <Compile Include="PAR.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="T.cs" />
     <Compile Include="T1.cs" />
