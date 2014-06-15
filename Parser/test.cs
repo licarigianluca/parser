@@ -3,7 +3,7 @@ class Test
 {
     static void Main(String[] args)
     {
-        Console.WriteLine("Per adesso non fa niente vero");
+        Console.WriteLine("Per adesso non fa niente ");
         String expr = "25+3*5";
         Parser p = new Parser();
         p.parse(expr);
