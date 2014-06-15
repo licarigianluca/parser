@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-public enum type { PLUS, TIMES, ID, INVALID_TOKEN ,EOF };
+public enum type { PLUS, TIMES, ID, INVALID_TOKEN, CLOSE_PAR, OPEN_PAR, EOF };
 
 public class Tokenizer
 {
@@ -35,6 +35,14 @@ public class Tokenizer
         {
             t = new Token(s[idx++].ToString(), (int)type.TIMES);
         }
+        else if (s[idx] == '(')
+        {
+            t = new Token(s[idx++].ToString(), (int)type.OPEN_PAR);
+        }
+        else if (s[idx] == ')')
+        {
+            t = new Token(s[idx++].ToString(), (int)type.CLOSE_PAR);
+        }
         else if (isDigit(s[idx]))
         {
             lexeme = s[idx++].ToString();
@@ -54,10 +62,13 @@ public class Tokenizer
 
     private bool isDigit(char c)
     {
-        
         return (c >= '0' && c <= '9');
     }
 
+    private bool isChar(char c)
+    {
+        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+    }
 
 }
 

@@ -17,9 +17,5 @@ public class Token
         this.value = value;
         this.type = type;
     }
-
-
-
-
 }
 
