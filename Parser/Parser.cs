@@ -30,14 +30,22 @@ public class Parser
     E1 E1()
     {
 
+        //first set
         if (lookahead.Type == (int)type.PLUS)
         {
             Match(type.PLUS);
 
             return new E1(T(), E1());
         }
-        else
+        else if ((lookahead.Type == (int)type.CLOSE_PAR) || (lookahead.Type == (int)type.EOF))
+        {
             return null;
+        }
+        else
+        {
+            Debug.Assert(false, "Syntax error");
+            return null;
+        }
     }
 
 
@@ -48,13 +56,22 @@ public class Parser
 
     T1 T1()
     {
+
+
         if (lookahead.Type == (int)type.TIMES)
         {
             Match(type.TIMES);
             return new T1(F(), T1());
         }
-        else
+        else if ((lookahead.Type == (int)type.CLOSE_PAR)
+                    || (lookahead.Type == (int)type.PLUS)
+                    || (lookahead.Type == (int)type.EOF))
             return null;
+        else
+        {
+            Debug.Assert(false, "Syntax error");
+            return null;
+        }
     }
 
     F F()

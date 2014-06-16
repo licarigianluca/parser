@@ -25,6 +25,7 @@ public class Tokenizer
 
         if (idx >= s.Length)
         {
+
             t = new Token("EOF".ToString(), (int)type.EOF);
         }
         else if (s[idx] == '+')

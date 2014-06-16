@@ -35,6 +35,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EOF.cs" />
     <Compile Include="E.cs" />
     <Compile Include="E1.cs" />
     <Compile Include="F.cs" />

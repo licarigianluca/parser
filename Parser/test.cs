@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+
 class Test
 {
     static void Main(String[] args)
     {
         Console.WriteLine("Start parsing...");
-        String expr = "5&+4";
+        String expr = "(5)";
         showToken(expr);
         parseExpr(expr);
 
@@ -16,7 +17,8 @@ class Test
     {
         Parser p = new Parser();
         E e = p.parse(expr);
-        Debug.Assert(e is E, "Malformed Expression");
+        //Debug.Assert(e is E, "Malformed Expression");
+        
         Console.WriteLine("Finish parsing...");
     }
 
@@ -29,6 +31,7 @@ class Test
             Console.WriteLine(lookahead.Value + "\t" + converter(lookahead.Type));
             lookahead = t.nextToken();
         }
+        Console.WriteLine(lookahead.Value + "\t" + converter(lookahead.Type));
     }
     
     public static String converter(int type){
@@ -41,7 +44,7 @@ class Test
             case 3: return "INVALID_TOKEN";
             case 4: return "CLOSE_PAR";
             case 5: return "OPEN_PAR";
-            case 7: return "OEF";
+            case 6: return "EOF";
             default: return null;
         }
         
