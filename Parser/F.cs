@@ -5,6 +5,7 @@ using System.Text;
 
 public class F
 {
+    public int intValue;
     public E e;
     public String value;
     public PAR par1, par2;
@@ -24,5 +25,15 @@ public class F
         this.par1 = null;
         this.par2 = null;
     }
+
+    public F(int intValue)
+    {
+        this.intValue = intValue;
+        this.value = null;
+        this.e = null;
+        this.par1 = null;
+        this.par2 = null;
+    }
+
 
 }

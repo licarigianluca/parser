@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 
-public class EOF
+
+public class ASSIGN
 {
     string value;
 
-    public EOF()
+    public ASSIGN()
     {
-        this.value = "EOF";
+        this.value = ":=";
     }
+
 }

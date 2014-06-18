@@ -35,6 +35,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AS.cs" />
+    <Compile Include="ASSIGN.cs" />
     <Compile Include="EOF.cs" />
     <Compile Include="E.cs" />
     <Compile Include="E1.cs" />
@@ -42,6 +44,10 @@
     <Compile Include="OP.cs" />
     <Compile Include="PAR.cs" />
     <Compile Include="Parser.cs" />
+    <Compile Include="P.cs" />
+    <Compile Include="S1.cs" />
+    <Compile Include="SEMICOLON.cs" />
+    <Compile Include="S.cs" />
     <Compile Include="T.cs" />
     <Compile Include="T1.cs" />
     <Compile Include="test.cs" />

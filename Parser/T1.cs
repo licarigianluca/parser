@@ -17,6 +17,3 @@ public class T1
         this.t1 = t1;
     }
 }
-
-
-

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Diagnostics;
+
 
 
 
@@ -10,6 +12,7 @@ public class Parser
 {
     private Tokenizer t;
     Token lookahead;
+    LinkedList<Token> tokenList;
 
     public Parser()
     {
@@ -20,11 +23,11 @@ public class Parser
     {
         int result = 0;
         Type type = typeof(Z);
-        String pippo = type.ToString();
+        String typeStr = type.ToString();
 
         
 
-        switch (pippo)
+        switch (typeStr)
         {
             case "E":
                 E e = (E)(Object)z;
@@ -87,15 +90,47 @@ public class Parser
 
         return result;
     }
-    public E parse(String s)
+    
+
+   
+    public P parse(String s)
     {
         t = new Tokenizer(s);
         lookahead = t.nextToken();
 
-        E e = E();
+       // E e = E();
+        P p = P();
         Match(type.EOF);
-        return e;
+        return p;
 
+    }
+
+    P P()
+    {
+        return new P(S());
+    }
+
+    S S(){
+        return new S(AS(),S1());
+    }
+
+    S1 S1(){
+        if (lookahead.Type == (int)type.SEMICOLON)
+        {
+            Match(type.SEMICOLON);
+            return new S1(S());
+        }
+        return null;
+    }
+
+    AS AS()
+    {
+        
+        Match(type.ID);
+        Match(type.ASSIGN);
+        String value = lookahead.Value;
+        return new AS(E(),value);
+        
     }
 
     E E()
@@ -144,13 +179,20 @@ public class Parser
             e = E();
             Match(type.CLOSE_PAR);
             return new F(e);
-
         }
+        else if (lookahead.Type == (int)type.ID)
+        {
+            String value = lookahead.Value;
+            Match(type.ID);
+            return new F(value);
+        }
+        else
+        {
 
-        String value = lookahead.Value;
-        Match(type.ID);
-        return new F(value);
-
+            String value = lookahead.Value;
+            Match(type.NUM);
+            return new F(Convert.ToInt32(value));
+        }
     }
 
 
@@ -160,5 +202,6 @@ public class Parser
         Debug.Assert(lookahead.Type == (int)t, "Syntax error");
         lookahead = this.t.nextToken();
     }
-}
 
+    
+}

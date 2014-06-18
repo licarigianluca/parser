@@ -5,12 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-public class EOF
-{
-    string value;
 
-    public EOF()
+public class SEMICOLON
+{
+    private char value;
+
+    public SEMICOLON()
     {
-        this.value = "EOF";
+        this.value = ';';
     }
 }
+
