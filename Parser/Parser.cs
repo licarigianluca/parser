@@ -16,12 +16,86 @@ public class Parser
 
     }
 
+    public int eval<Z>(Z z)
+    {
+        int result = 0;
+        Type type = typeof(Z);
+        String pippo = type.ToString();
+
+        
+
+        switch (pippo)
+        {
+            case "E":
+                E e = (E)(Object)z;
+                if(e.e1 == null){
+                    result = eval(e.t);
+                }
+                
+                else{
+                    result = eval(e.t)+eval(e.e1);
+                }
+                
+                break;
+            case "E1":
+                E1 e1 = (E1)(Object)z;
+                if (e1.e1 == null)
+                {
+                    result = eval(e1.t);
+                }
+                else
+                {
+                    result = eval(e1.t) + eval(e1.e1);
+                }
+                break;
+            case "T":
+                T t = (T)(Object)z;
+                if (t.t1==null)
+                {
+                    result = eval(t.f);
+                }
+                else{
+                    result = eval(t.f)*eval(t.t1);
+                }
+                break;
+            case "T1":
+                T1 t1 = (T1)(Object)z;
+                if (t1.t1 == null)
+                {
+                    result = eval(t1.f);
+                }
+                else
+                {
+                    result = eval(t1.f) * eval(t1.t1);
+                }
+                break;
+            case "F":
+                F f = (F)(Object)z;
+                if (f.value != null)
+                {
+                    result = Convert.ToInt32(f.value);
+                }
+                else
+                {
+                    result = eval(f.e);
+                }
+                break;
+            default: return 0;
+
+        }
+
+
+        return result;
+    }
     public E parse(String s)
     {
         t = new Tokenizer(s);
         lookahead = t.nextToken();
 
-        return E();
+        E e = E();
+        Match(type.EOF);
+        return e;
+
     }
 
     E E()
@@ -38,15 +112,8 @@ public class Parser
 
             return new E1(T(), E1());
         }
-        else if ((lookahead.Type == (int)type.CLOSE_PAR) || (lookahead.Type == (int)type.EOF))
-        {
-            return null;
-        }
-        else
-        {
-            Debug.Assert(false, "Syntax error");
-            return null;
-        }
+
+        return null;
     }
 
 
@@ -58,21 +125,13 @@ public class Parser
     T1 T1()
     {
 
-
         if (lookahead.Type == (int)type.TIMES)
         {
             Match(type.TIMES);
             return new T1(F(), T1());
         }
-        else if ((lookahead.Type == (int)type.CLOSE_PAR)
-                    || (lookahead.Type == (int)type.PLUS)
-                    || (lookahead.Type == (int)type.EOF))
-            return null;
-        else
-        {
-            Debug.Assert(false, "Syntax error");
-            return null;
-        }
+        return null;
+
     }
 
     F F()

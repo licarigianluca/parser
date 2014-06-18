@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 public class T
 {
-    F f;
-    T1 t1;
+    public F f;
+    public T1 t1;
+
 
     public T(F f, T1 t1)
     {

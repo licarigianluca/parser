@@ -5,9 +5,11 @@ using System.Text;
 
 public class E
 {
-    T t;
-    E1 e1;
-    EOF eof;
+     public T t;
+     public E1 e1;
+     public EOF eof;
+
+    
 
     public E(T t, E1 e1)
     {

@@ -6,19 +6,21 @@ class Test
     static void Main(String[] args)
     {
         Console.WriteLine("Start parsing...");
-        String expr = "(5)";
+        String expr =  Console.ReadLine();
         showToken(expr);
         parseExpr(expr);
-
+        
     
     }
 
     private static void parseExpr(String expr)
     {
+        
         Parser p = new Parser();
         E e = p.parse(expr);
         //Debug.Assert(e is E, "Malformed Expression");
-        
+        int result =p.eval(e);
+        Console.WriteLine("Result of evaluation:\t" + result);
         Console.WriteLine("Finish parsing...");
     }
 
@@ -33,6 +35,7 @@ class Test
         }
         Console.WriteLine(lookahead.Value + "\t" + converter(lookahead.Type));
     }
+
     
     public static String converter(int type){
 

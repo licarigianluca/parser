@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-class EOF
+public class EOF
 {
     string value;
 
