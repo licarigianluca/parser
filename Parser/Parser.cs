@@ -24,9 +24,7 @@ public class Parser
         int result = 0;
         Type type = typeof(Z);
         String typeStr = type.ToString();
-
         
-
         switch (typeStr)
         {
             case "E":
@@ -38,7 +36,6 @@ public class Parser
                 else{
                     result = eval(e.t)+eval(e.e1);
                 }
-                
                 break;
             case "E1":
                 E1 e1 = (E1)(Object)z;
@@ -104,12 +101,12 @@ public class Parser
         return p;
 
     }
-
+    //P -> S 'EOF'
     P P()
     {
         return new P(S());
     }
-
+    //S -> AS S | epsilon
     S S(){
         return new S(AS(),S1());
     }
@@ -122,7 +119,7 @@ public class Parser
         }
         return null;
     }
-
+    //AS -> ID ':=' E ';'
     AS AS()
     {
         
@@ -132,11 +129,14 @@ public class Parser
         return new AS(E(),value);
         
     }
-
+    //E -> T E1
     E E()
     {
         return new E(T(), E1());
     }
+    //E1 -> '+' T E1 | 
+    //      '-' T E1 |
+    //      epsilon
     E1 E1()
     {
 
@@ -151,12 +151,15 @@ public class Parser
         return null;
     }
 
-
+    //T -> F T1
     T T()
     {
         return new T(F(), T1());
     }
 
+    //T1 -> '*' F T1 |
+    //      '/' F T1 |
+    //      epsilon
     T1 T1()
     {
 
@@ -169,6 +172,9 @@ public class Parser
 
     }
 
+    //F -> '(' E ')' |
+    //     ID        |
+    //     NUM
     F F()
     {
         E e;
