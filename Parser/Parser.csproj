@@ -37,10 +37,12 @@
   <ItemGroup>
     <Compile Include="AS.cs" />
     <Compile Include="ASSIGN.cs" />
+    <Compile Include="Environment.cs" />
     <Compile Include="EOF.cs" />
     <Compile Include="E.cs" />
     <Compile Include="E1.cs" />
     <Compile Include="F.cs" />
+    <Compile Include="Frame.cs" />
     <Compile Include="OP.cs" />
     <Compile Include="PAR.cs" />
     <Compile Include="Parser.cs" />

@@ -22,19 +22,23 @@ public class Parser
     public int eval<Z>(Z z)
     {
         int result = 0;
+        Environment environment = new Environment();
         Type type = typeof(Z);
         String typeStr = type.ToString();
         
+
         switch (typeStr)
         {
             case "E":
                 E e = (E)(Object)z;
-                if(e.e1 == null){
+                if (e.e1 == null)
+                {
                     result = eval(e.t);
                 }
-                
-                else{
-                    result = eval(e.t)+eval(e.e1);
+
+                else
+                {
+                    result = eval(e.t) + eval(e.e1);
                 }
                 break;
             case "E1":
@@ -50,12 +54,13 @@ public class Parser
                 break;
             case "T":
                 T t = (T)(Object)z;
-                if (t.t1==null)
+                if (t.t1 == null)
                 {
                     result = eval(t.f);
                 }
-                else{
-                    result = eval(t.f)*eval(t.t1);
+                else
+                {
+                    result = eval(t.f) * eval(t.t1);
                 }
                 break;
             case "T1":
@@ -71,31 +76,40 @@ public class Parser
                 break;
             case "F":
                 F f = (F)(Object)z;
-                if (f.value != null)
+                if (f.intValue != null)
                 {
                     result = Convert.ToInt32(f.value);
+                }
+                else if (f.value != null)
+                {
+                    //ID
+                    if (!environment.contains(f.value))
+                    {
+                        
+                    }
+
                 }
                 else
                 {
                     result = eval(f.e);
                 }
                 break;
-            default: return 0;
+            default: break;
 
         }
 
-
+        //stack.push(result)
         return result;
     }
-    
 
-   
+
+
     public P parse(String s)
     {
         t = new Tokenizer(s);
         lookahead = t.nextToken();
 
-       // E e = E();
+        // E e = E();
         P p = P();
         Match(type.EOF);
         return p;
@@ -106,28 +120,33 @@ public class Parser
     {
         return new P(S());
     }
-    //S -> AS S | epsilon
-    S S(){
-        return new S(AS(),S1());
-    }
-
-    S1 S1(){
-        if (lookahead.Type == (int)type.SEMICOLON)
+    //S -> AS S1 | epsilon
+    S S()
+    {
+        if (lookahead.Type == (int)type.ID)
         {
-            Match(type.SEMICOLON);
-            return new S1(S());
+            return new S(AS(), S1());
         }
+
         return null;
     }
-    //AS -> ID ':=' E ';'
+    //S1 -> ';' S
+    S1 S1()
+    {
+
+        Match(type.SEMICOLON);
+        return new S1(S());
+
+    }
+    //AS -> ID ':=' E 
     AS AS()
     {
-        
+
         Match(type.ID);
         Match(type.ASSIGN);
         String value = lookahead.Value;
-        return new AS(E(),value);
-        
+        return new AS(E(), value);
+
     }
     //E -> T E1
     E E()
@@ -140,7 +159,7 @@ public class Parser
     E1 E1()
     {
 
-        //first set
+
         if (lookahead.Type == (int)type.PLUS)
         {
             Match(type.PLUS);
@@ -209,5 +228,5 @@ public class Parser
         lookahead = this.t.nextToken();
     }
 
-    
+
 }
