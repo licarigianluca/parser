@@ -7,12 +7,12 @@ using System.Text;
 
 public class P
 {
-    public S stmts;
+    public S s;
     public EOF eof;
 
-    public P(S stmts)
+    public P(S s)
     {
-        this.stmts = stmts;
+        this.s = s;
         this.eof = new EOF();
     }
 }

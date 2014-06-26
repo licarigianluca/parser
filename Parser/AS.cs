@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 public class AS
 {
-    public String value;
+    public String ID;
     public E e;
     private ASSIGN assign;
 
-    public AS(E e, String value)
+    public AS(E e, String ID)
     {
         this.e = e;
         this.assign = new ASSIGN();
-        this.value = value;
+        this.ID = ID;
     }
 }
 

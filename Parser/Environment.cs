@@ -35,10 +35,13 @@ public class Environment
     {
         this.env.Add(id, value);
     }
-    public void updateFrame(String id, int value)
+    public void updateFrame(String key, int value)
     {
-        this.env[id] = value;
+        this.env[key] = value;
     }
-    
+    public int getValue(String key)
+    {
+        return this.env[key];
+    }
 }
 

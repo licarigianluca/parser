@@ -8,6 +8,7 @@ class Test
     {
         Console.WriteLine("Start parsing...");
         String expr = Console.ReadLine();
+        //String expr = "x:=69;";
         showToken(expr);
         parseExpr(expr);
 
@@ -19,8 +20,8 @@ class Test
 
         Parser p = new Parser();
         P program = p.parse(expr);
-        
-        //int result = p.eval(e);
+        Environment env = new Environment();
+        env = p.eval(program,env);
         //Console.WriteLine("Result of evaluation:\t" + result);
         Console.WriteLine("Finish parsing...");
     }

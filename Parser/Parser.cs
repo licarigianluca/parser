@@ -19,79 +19,101 @@ public class Parser
 
     }
 
-    public int eval<Z>(Z z)
+    public Environment eval<Z>(Z z, Environment env)
     {
+        if (z == null) return env;
+        
         int result = 0;
-        Environment environment = new Environment();
         Type type = typeof(Z);
         String typeStr = type.ToString();
-        
 
         switch (typeStr)
         {
+            case "P":
+                P p = (P)(Object)z;
+                
+                env = eval(p.s, env);
+                break;
+            case "S":
+                S s = (S)(Object)z;
+                
+                env = eval(s.assign, env);
+                env = eval(s.s1, env);
+                break;
+            case "S1":
+                S1 s1 = (S1)(Object)z;
+                env = eval(s1.s, env);
+                break;
+            case "AS":
+                AS assign = (AS)(Object)z;
+                eval(assign.e, env);
+                env.updateFrame(assign.ID, env.pop());
+                break;
+
+
             case "E":
                 E e = (E)(Object)z;
                 if (e.e1 == null)
                 {
-                    result = eval(e.t);
+                    env = eval(e.t,env);
                 }
 
                 else
                 {
-                    result = eval(e.t) + eval(e.e1);
+                    env = eval(e.t, env);
                 }
                 break;
             case "E1":
                 E1 e1 = (E1)(Object)z;
                 if (e1.e1 == null)
                 {
-                    result = eval(e1.t);
+                    env = eval(e1.t,env);
                 }
                 else
                 {
-                    result = eval(e1.t) + eval(e1.e1);
+                    env = eval(e1.t, env);
                 }
                 break;
             case "T":
                 T t = (T)(Object)z;
                 if (t.t1 == null)
                 {
-                    result = eval(t.f);
+                    env = eval(t.f,env);
                 }
                 else
                 {
-                    result = eval(t.f) * eval(t.t1);
+                    env = eval(t.f,env);
                 }
                 break;
             case "T1":
                 T1 t1 = (T1)(Object)z;
                 if (t1.t1 == null)
                 {
-                    result = eval(t1.f);
+                    env = eval(t1.f,env);
                 }
                 else
                 {
-                    result = eval(t1.f) * eval(t1.t1);
+                    env = eval(t1.f,env);
                 }
                 break;
             case "F":
                 F f = (F)(Object)z;
-                if (f.intValue != null)
+
+                if (f.e != null)
                 {
-                    result = Convert.ToInt32(f.value);
+                    env = eval(f.e, env);
+                                      
                 }
                 else if (f.value != null)
                 {
                     //ID
-                    if (!environment.contains(f.value))
-                    {
-                        
-                    }
+                    Debug.Assert(env.contains(f.value), "Identifier not already present in the store.");
+                    env.push(env.getValue(f.value));
 
                 }
                 else
                 {
-                    result = eval(f.e);
+                    env.push(f.intValue);
                 }
                 break;
             default: break;
@@ -99,7 +121,8 @@ public class Parser
         }
 
         //stack.push(result)
-        return result;
+        result += result;
+        return env;
     }
 
 
@@ -109,12 +132,13 @@ public class Parser
         t = new Tokenizer(s);
         lookahead = t.nextToken();
 
-        // E e = E();
+
         P p = P();
         Match(type.EOF);
         return p;
 
     }
+
     //P -> S 'EOF'
     P P()
     {
@@ -141,10 +165,9 @@ public class Parser
     //AS -> ID ':=' E 
     AS AS()
     {
-
+        String value = lookahead.Value;
         Match(type.ID);
         Match(type.ASSIGN);
-        String value = lookahead.Value;
         return new AS(E(), value);
 
     }
@@ -164,10 +187,15 @@ public class Parser
         {
             Match(type.PLUS);
 
-            return new E1(T(), E1());
+            return new E1(T(), E1(),'+');
         }
+        else if (lookahead.Type == (int)type.MINUS)
+        {
+            Match(type.MINUS);
 
-        return null;
+            return new E1(T(), E1(),'-');
+        }
+        else return null;
     }
 
     //T -> F T1
@@ -185,9 +213,14 @@ public class Parser
         if (lookahead.Type == (int)type.TIMES)
         {
             Match(type.TIMES);
-            return new T1(F(), T1());
+            return new T1(F(), T1(),'*');
         }
-        return null;
+        else if (lookahead.Type == (int)type.OBELUS)
+        {
+            Match(type.OBELUS);
+            return new T1(F(), T1(),'/');
+        }
+        else return null;
 
     }
 
