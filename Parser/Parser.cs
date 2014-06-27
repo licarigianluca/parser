@@ -22,7 +22,7 @@ public class Parser
     public Environment eval<Z>(Z z, Environment env)
     {
         if (z == null) return env;
-        
+
         int result = 0;
         Type type = typeof(Z);
         String typeStr = type.ToString();
@@ -31,12 +31,12 @@ public class Parser
         {
             case "P":
                 P p = (P)(Object)z;
-                
+
                 env = eval(p.s, env);
                 break;
             case "S":
                 S s = (S)(Object)z;
-                
+
                 env = eval(s.assign, env);
                 env = eval(s.s1, env);
                 break;
@@ -55,45 +55,54 @@ public class Parser
                 E e = (E)(Object)z;
                 if (e.e1 == null)
                 {
-                    env = eval(e.t,env);
+                    env = eval(e.t, env);
                 }
 
                 else
                 {
                     env = eval(e.t, env);
+                    env = eval(e.e1, env);
+                    
                 }
                 break;
             case "E1":
                 E1 e1 = (E1)(Object)z;
                 if (e1.e1 == null)
                 {
-                    env = eval(e1.t,env);
+                    env = eval(e1.t, env);
+                    consumeOP(e1.op, env);
                 }
                 else
                 {
                     env = eval(e1.t, env);
+                    env = eval(e1.e1, env);
+                    consumeOP(e1.op, env);
                 }
                 break;
             case "T":
                 T t = (T)(Object)z;
                 if (t.t1 == null)
                 {
-                    env = eval(t.f,env);
+                    env = eval(t.f, env);
                 }
                 else
                 {
-                    env = eval(t.f,env);
+                    env = eval(t.f, env);
+                    env = eval(t.t1, env);
                 }
                 break;
             case "T1":
                 T1 t1 = (T1)(Object)z;
                 if (t1.t1 == null)
                 {
-                    env = eval(t1.f,env);
+                    env = eval(t1.f, env);
+                    consumeOP(t1.op, env);
                 }
                 else
                 {
-                    env = eval(t1.f,env);
+                    env = eval(t1.f, env);
+                    env = eval(t1.t1, env);
+                    consumeOP(t1.op, env);
                 }
                 break;
             case "F":
@@ -102,7 +111,7 @@ public class Parser
                 if (f.e != null)
                 {
                     env = eval(f.e, env);
-                                      
+
                 }
                 else if (f.value != null)
                 {
@@ -187,13 +196,13 @@ public class Parser
         {
             Match(type.PLUS);
 
-            return new E1(T(), E1(),'+');
+            return new E1(T(), E1(), '+');
         }
         else if (lookahead.Type == (int)type.MINUS)
         {
             Match(type.MINUS);
 
-            return new E1(T(), E1(),'-');
+            return new E1(T(), E1(), '-');
         }
         else return null;
     }
@@ -213,12 +222,12 @@ public class Parser
         if (lookahead.Type == (int)type.TIMES)
         {
             Match(type.TIMES);
-            return new T1(F(), T1(),'*');
+            return new T1(F(), T1(), '*');
         }
         else if (lookahead.Type == (int)type.OBELUS)
         {
             Match(type.OBELUS);
-            return new T1(F(), T1(),'/');
+            return new T1(F(), T1(), '/');
         }
         else return null;
 
@@ -260,6 +269,33 @@ public class Parser
         Debug.Assert(lookahead.Type == (int)t, "Syntax error");
         lookahead = this.t.nextToken();
     }
+    protected void consumeOP(OP op, Environment env)
+    {
+        int op1, op2, result=0;
+        op1 = env.pop();
+        op2 = env.pop();
 
-
+        switch (op.getValue())
+        {
+            case '+':
+                result = op1 + op2;
+                break;
+            case '-':
+                result = op1 - op2;
+                break;
+            case '*':
+                result = op1 * op2;
+                break;
+            case '/':
+                result = op2 / op1;
+                break;
+            default:
+                break;
+        }
+        env.push(result);
+    }
 }
+
+
+
+

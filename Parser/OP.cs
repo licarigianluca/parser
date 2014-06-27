@@ -6,11 +6,16 @@ using System.Text;
 
 public class OP
 {
-    char value;
+    private char value;
 
     public OP(char value)
     {
         this.value = value;
+    }
+
+    public char getValue()
+    {
+        return this.value;
     }
 };
 

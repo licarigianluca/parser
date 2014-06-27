@@ -7,8 +7,8 @@ class Test
     static void Main(String[] args)
     {
         Console.WriteLine("Start parsing...");
-        String expr = Console.ReadLine();
-        //String expr = "x:=69;";
+        //String expr = Console.ReadLine();
+        String expr = "x:=50*2;y:=2;z:=x/y;";
         showToken(expr);
         parseExpr(expr);
 
