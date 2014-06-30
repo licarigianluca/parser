@@ -23,7 +23,6 @@ public class Parser
     {
         if (z == null) return env;
 
-        int result = 0;
         Type type = typeof(Z);
         String typeStr = type.ToString();
 
@@ -62,7 +61,7 @@ public class Parser
                 {
                     env = eval(e.t, env);
                     env = eval(e.e1, env);
-                    
+
                 }
                 break;
             case "E1":
@@ -129,8 +128,6 @@ public class Parser
 
         }
 
-        //stack.push(result)
-        result += result;
         return env;
     }
 
@@ -140,7 +137,6 @@ public class Parser
     {
         t = new Tokenizer(s);
         lookahead = t.nextToken();
-
 
         P p = P();
         Match(type.EOF);
@@ -156,12 +152,11 @@ public class Parser
     //S -> AS S1 | epsilon
     S S()
     {
-        if (lookahead.Type == (int)type.ID)
+        if (lookahead.Type == (int)type.ID | lookahead.Type == (int)type.WHILE | lookahead.Type == (int)type.IF)
         {
             return new S(AS(), S1());
         }
-
-        return null;
+        else return null;
     }
     //S1 -> ';' S
     S1 S1()
@@ -171,13 +166,96 @@ public class Parser
         return new S1(S());
 
     }
-    //AS -> ID ':=' E 
+    //AS -> ID ':=' E |
+    //     'while' '(' C ')' '{' S '}'|
+    //     'if' '(' C ')' 'then' '{' S'}' EIF
     AS AS()
     {
-        String value = lookahead.Value;
-        Match(type.ID);
-        Match(type.ASSIGN);
-        return new AS(E(), value);
+        C c;
+        S s;
+        EIF eif;
+
+        if (lookahead.Type == (int)type.ID)
+        {
+            String value = lookahead.Value;
+            Match(type.ID);
+            Match(type.ASSIGN);
+            return new AS(E(), value);
+        }
+        else if (lookahead.Type == (int)type.WHILE)
+        {
+            Match(type.WHILE);
+            Match(type.OPEN_PAR);
+            c = C();
+            Match(type.CLOSE_PAR);
+            Match(type.OPEN_CURLY);
+            s = S();
+            Match(type.CLOSE_CURLY);
+            return new AS(c, s);
+        }
+        else
+        {
+            Match(type.IF);
+            Match(type.OPEN_PAR);
+            c = C();
+            Match(type.CLOSE_PAR);
+            Match(type.THEN);
+            Match(type.OPEN_CURLY);
+            s = S();
+            Match(type.CLOSE_CURLY);
+            eif = EIF();
+            return new AS(c, s, eif);
+
+        }
+    }
+    //EIF -> 'else' '{' S '}' | epsilon
+    EIF EIF()
+    {
+        S s;
+        if (lookahead.Type == (int)type.ELSE)
+        {
+            Match(type.ELSE);
+            Match(type.OPEN_CURLY);
+            s = S();
+            Match(type.CLOSE_CURLY);
+            return new EIF(s);
+        }
+        else return null;
+    }
+    //C -> E C1
+    C C()
+    {
+        return new C(E(), C1());
+    }
+    //C1 ->     '<'  E |
+    //          '>'  E |
+    //          '='  E |
+    //          '>=' E | NO
+    //          '<=' E | NO
+    //          '!=' E |
+    C1 C1()
+    {
+        if (lookahead.Type == (int)type.LT)
+        {
+            Match(type.LT);
+
+            return new C1(new OP('<'), E());
+        }
+        else if (lookahead.Type == (int)type.GT)
+        {
+            Match(type.GT);
+            return new C1(new OP('>'), E());
+        }
+        else if (lookahead.Type == (int)type.EQUAL)
+        {
+            Match(type.EQUAL);
+            return new C1(new OP('='), E());
+        }
+        else
+        {
+            Match(type.DISEQUAL);
+            return new C1(new OP("!="), E());
+        }
 
     }
     //E -> T E1
@@ -271,7 +349,7 @@ public class Parser
     }
     protected void consumeOP(OP op, Environment env)
     {
-        int op1, op2, result=0;
+        int op1, op2, result = 0;
         op1 = env.pop();
         op2 = env.pop();
 
@@ -281,7 +359,7 @@ public class Parser
                 result = op1 + op2;
                 break;
             case '-':
-                result = op1 - op2;
+                result = op2 - op1;
                 break;
             case '*':
                 result = op1 * op2;

@@ -4,13 +4,26 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-public enum type { PLUS, TIMES, ID, INVALID_TOKEN, CLOSE_PAR, OPEN_PAR, EOF, NUM, MOD, DIV, OBELUS, MINUS, ASSIGN, SEMICOLON };
+public enum type
+{
+    PLUS, TIMES, ID, INVALID_TOKEN, CLOSE_PAR, OPEN_PAR, EOF, NUM,
+    MOD, DIV, OBELUS, MINUS, ASSIGN, SEMICOLON, OPEN_CURLY, CLOSE_CURLY, ARROW,
+    IF, THEN, ELSE, WHILE, GT, LT, EQUAL, DISEQUAL
+};
+
 
 public class Tokenizer
 {
+    
     private int idx;
     private String s;
     private LinkedList<Token> tokenList;
+    private Dictionary<String,int> keyword=new Dictionary<string,int>(){
+        {"if",(int)type.IF},
+        {"then",(int)type.THEN},
+        {"else",(int)type.ELSE},
+        {"while",(int)type.WHILE},
+    };
 
     public Tokenizer(String expr)
     {
@@ -36,7 +49,14 @@ public class Tokenizer
         }
         else if (s[idx] == '-')
         {
-            t = new Token(s[idx++].ToString(), (int)type.MINUS);
+            if (idx < s.Length && s[idx + 1] == '>')
+            {
+                string str = s[idx].ToString() + s[idx + 1].ToString();
+                t = new Token(str, (int)type.ARROW);
+                idx += 2;
+            }
+            else
+                t = new Token(s[idx++].ToString(), (int)type.MINUS);
         }
         else if (s[idx] == '*')
         {
@@ -58,11 +78,41 @@ public class Tokenizer
         {
             t = new Token(s[idx++].ToString(), (int)type.SEMICOLON);
         }
+        else if (s[idx] == '}')
+        {
+            t = new Token(s[idx++].ToString(), (int)type.CLOSE_CURLY);
+        }
+        else if (s[idx] == '{')
+        {
+            t = new Token(s[idx++].ToString(), (int)type.OPEN_CURLY);
+        }
+        else if (s[idx] == '<')
+        {
+            t = new Token(s[idx++].ToString(), (int)type.LT);
+        }
+        else if (s[idx] == '>')
+        {
+            t = new Token(s[idx++].ToString(), (int)type.GT);
+        }
+        else if (s[idx] == '=')
+        {
+            t = new Token(s[idx++].ToString(), (int)type.EQUAL);
+        }
+        else if (s[idx] == '{')
+        {
+            t = new Token(s[idx++].ToString(), (int)type.OPEN_CURLY);
+        }
+        else if (s[idx] == '!' && s[idx + 1] == '=')
+        {
+            string str = s[idx].ToString() + s[idx + 1].ToString();
+            t = new Token(str, (int)type.DISEQUAL);
+            idx += 2;
+        }
         else if (s[idx] == ':' && s[idx + 1] == '=')
         {
-            string str = s[idx].ToString() + s[idx+1].ToString();
+            string str = s[idx].ToString() + s[idx + 1].ToString();
             t = new Token(str, (int)type.ASSIGN);
-            idx += 2; ;
+            idx += 2;
         }
         else if (isDigit(s[idx]))
         {
@@ -71,6 +121,7 @@ public class Tokenizer
             {
                 lexeme += s[idx++];
             }
+
             t = new Token(lexeme.ToString(), (int)type.NUM);
         }
         else if (isChar(s[idx]))
@@ -80,7 +131,12 @@ public class Tokenizer
             {
                 lexeme += s[idx++];
             }
+            if(keyword.ContainsKey(lexeme)){
+                t= new Token(lexeme.ToString(), keyword[lexeme]);
+            }
+            else{
             t = new Token(lexeme.ToString(), (int)type.ID);
+            }
         }
         else
         {
@@ -109,5 +165,5 @@ public class Tokenizer
     {
         return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
     }
-
+    
 }

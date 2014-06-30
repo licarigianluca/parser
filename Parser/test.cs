@@ -8,7 +8,7 @@ class Test
     {
         Console.WriteLine("Start parsing...");
         //String expr = Console.ReadLine();
-        String expr = "x:=50*2;y:=2;z:=x/y;";
+        String expr = "while(x<0){x:=5;};";
         showToken(expr);
         parseExpr(expr);
 
@@ -71,8 +71,19 @@ class Test
             case 11: return "MINUS";
             case 12: return "ASSIGN";
             case 13: return "SEMICOLON";
+            case 14: return "OPEN_CURLY";
+            case 15: return "CLOSE_CURLY";
+            case 16: return "ARROW";
+            case 17: return "IF";
+            case 18: return "THEN";
+            case 19: return "ELSE";
+            case 20: return "WHILE";
+            case 21: return "GT";
+            case 22: return "LT";
+            case 23: return "EQUAL";
+            case 24: return "DISEQUAL";
             default: return null;
         }
-
+        
     }
 }
