@@ -8,7 +8,9 @@ class Test
     {
         Console.WriteLine("Start parsing...");
         //String expr = Console.ReadLine();
-        String expr = "x:=6;if(x=6)then{y:=x;}else{x:=0;};";
+        String expr = "x:=0;y:=0;while(x<11){y:=y+1;x:=x+1;};";
+        //String expr = "x:=5;if(x=6)then{y:=x;}else{x:=0;y:=55;};";
+        //String expr = "x:=6;if(x=6)then{y:=x;};";
         showToken(expr);
         parseExpr(expr);
 

@@ -7,7 +7,7 @@ using System.Text;
 
 public class ASSIGN
 {
-    string value;
+    private string value;
 
     public ASSIGN()
     {

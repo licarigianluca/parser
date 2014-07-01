@@ -45,29 +45,40 @@ public class Parser
                 break;
             case "AS":
                 AS assign = (AS)(Object)z;
+                if (assign.comcode == null)
+                {
+                    eval(assign.e, env);
+                    env.updateFrame(assign.ID, env.pop());
+                    break;
+                }
+                if (assign.comcode.value == "if")
+                {
+                    env = eval(assign.c, env);
 
-                if (assign.eif != null)
+                    if (env.pop() >= 0)
+                    {
+                        env = eval(assign.s, env);
+                        break;
+                    }
+                    else
+                    {
+                        env = eval(assign.eif, env);
+                        break;
+                    }
+                }
+                if (assign.comcode.value == "while")
                 {
                     env = eval(assign.c, env);
                     if (env.pop() >= 0)
                     {
                         env = eval(assign.s, env);
+                        env = eval(assign, env);
+                        break;
                     }
-                    else
-                    {
-                        env = eval(assign.eif, env);
-                    }
-
-
-                }
-                else
-                {
-
-                    //assignment
-                    eval(assign.e, env);
-                    env.updateFrame(assign.ID, env.pop());
+                    else break;
                 }
                 break;
+                               
             case "EIF":
                 EIF eif = (EIF)(Object)z;
                 env = eval(eif.s, env);
@@ -75,8 +86,8 @@ public class Parser
 
             case "C":
                 C c = (C)(Object)z;
-                env = eval(c.e,env);
-                env = eval(c.c1,env);
+                env = eval(c.e, env);
+                env = eval(c.c1, env);
                 break;
 
             case "C1":

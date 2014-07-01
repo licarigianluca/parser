@@ -13,6 +13,7 @@ public class AS
     public C c;
     public S s;
     public EIF eif;
+    public COMCODE comcode;
 
     public AS(E e, String ID)
     {
@@ -22,6 +23,7 @@ public class AS
         this.c = null;
         this.s = null;
         this.eif = null;
+        this.comcode = null;
     }
 
     public AS(C c, S s)
@@ -32,6 +34,7 @@ public class AS
         this.c = c;
         this.s = s;
         this.eif = null;
+        this.comcode = new COMCODE("while");
         
     }
 
@@ -43,6 +46,7 @@ public class AS
         this.c = c;
         this.s = s;
         this.eif = eif;
+        this.comcode = new COMCODE("if");
     }
 }
 

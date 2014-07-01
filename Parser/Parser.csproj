@@ -39,6 +39,7 @@
     <Compile Include="ASSIGN.cs" />
     <Compile Include="C.cs" />
     <Compile Include="C1.cs" />
+    <Compile Include="COMCODE.cs" />
     <Compile Include="EIF.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="EOF.cs" />
