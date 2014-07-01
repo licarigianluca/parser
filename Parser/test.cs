@@ -8,7 +8,7 @@ class Test
     {
         Console.WriteLine("Start parsing...");
         //String expr = Console.ReadLine();
-        String expr = "while(x<0){x:=5;};";
+        String expr = "x:=6;if(x=6)then{y:=x;}else{x:=0;};";
         showToken(expr);
         parseExpr(expr);
 
@@ -22,7 +22,6 @@ class Test
         P program = p.parse(expr);
         Environment env = new Environment();
         env = p.eval(program,env);
-        //Console.WriteLine("Result of evaluation:\t" + result);
         Console.WriteLine("Finish parsing...");
     }
 

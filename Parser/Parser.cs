@@ -45,10 +45,45 @@ public class Parser
                 break;
             case "AS":
                 AS assign = (AS)(Object)z;
-                eval(assign.e, env);
-                env.updateFrame(assign.ID, env.pop());
+
+                if (assign.eif != null)
+                {
+                    env = eval(assign.c, env);
+                    if (env.pop() >= 0)
+                    {
+                        env = eval(assign.s, env);
+                    }
+                    else
+                    {
+                        env = eval(assign.eif, env);
+                    }
+
+
+                }
+                else
+                {
+
+                    //assignment
+                    eval(assign.e, env);
+                    env.updateFrame(assign.ID, env.pop());
+                }
+                break;
+            case "EIF":
+                EIF eif = (EIF)(Object)z;
+                env = eval(eif.s, env);
                 break;
 
+            case "C":
+                C c = (C)(Object)z;
+                env = eval(c.e,env);
+                env = eval(c.c1,env);
+                break;
+
+            case "C1":
+                C1 c1 = (C1)(Object)z;
+                env = eval(c1.e, env);
+                consumeOP(c1.op, env);
+                break;
 
             case "E":
                 E e = (E)(Object)z;
@@ -61,7 +96,6 @@ public class Parser
                 {
                     env = eval(e.t, env);
                     env = eval(e.e1, env);
-
                 }
                 break;
             case "E1":
@@ -366,6 +400,15 @@ public class Parser
                 break;
             case '/':
                 result = op2 / op1;
+                break;
+            case '>':
+                result = op2 - op1;
+                break;
+            case '<':
+                result = op1 - op2;
+                break;
+            case '=':
+                result = op2 - op1;
                 break;
             default:
                 break;

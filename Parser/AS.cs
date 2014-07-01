@@ -9,8 +9,7 @@ public class AS
 {
     public String ID;
     public E e;
-    private ASSIGN assign;
-    
+    public ASSIGN assign;
     public C c;
     public S s;
     public EIF eif;
@@ -20,20 +19,30 @@ public class AS
         this.e = e;
         this.assign = new ASSIGN();
         this.ID = ID;
+        this.c = null;
+        this.s = null;
+        this.eif = null;
     }
 
     public AS(C c, S s)
     {
+        this.e = null;
+        this.assign = null;
+        this.ID = null;
         this.c = c;
         this.s = s;
+        this.eif = null;
         
     }
 
     public AS(C c, S s, EIF eif)
     {
+        this.e = null;
+        this.assign = null;
+        this.ID = null;
         this.c = c;
         this.s = s;
-
+        this.eif = eif;
     }
 }
 
