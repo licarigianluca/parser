@@ -12,6 +12,7 @@ public class AS
     public ASSIGN assign;
     public C c;
     public S s;
+    public R r;
     public EIF eif;
     public COMCODE comcode;
 
@@ -24,6 +25,7 @@ public class AS
         this.s = null;
         this.eif = null;
         this.comcode = null;
+        this.r = null;
     }
 
     public AS(C c, S s)
@@ -35,6 +37,7 @@ public class AS
         this.s = s;
         this.eif = null;
         this.comcode = new COMCODE("while");
+        this.r = null;
         
     }
 
@@ -47,6 +50,18 @@ public class AS
         this.s = s;
         this.eif = eif;
         this.comcode = new COMCODE("if");
+        this.r = null;
+    }
+    public AS(String functionName, String argument, S s, R r)
+    {
+        this.e = null;
+        this.assign = null;
+        this.ID = null;
+        this.c = null;
+        this.s = s;
+        this.eif = null;
+        this.comcode = new COMCODE("function");
+        this.r = r;
     }
 }
 

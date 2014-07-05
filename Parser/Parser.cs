@@ -197,7 +197,7 @@ public class Parser
     //S -> AS S1 | epsilon
     S S()
     {
-        if (lookahead.Type == (int)type.ID | lookahead.Type == (int)type.WHILE | lookahead.Type == (int)type.IF)
+        if (lookahead.Type == (int)type.ID | lookahead.Type == (int)type.WHILE | lookahead.Type == (int)type.IF | lookahead.Type == (int)type.FUNCTION)
         {
             return new S(AS(), S1());
         }
@@ -213,11 +213,13 @@ public class Parser
     }
     //AS -> ID ':=' E |
     //     'while' '(' C ')' '{' S '}'|
-    //     'if' '(' C ')' 'then' '{' S'}' EIF
+    //     'if' '(' C ')' 'then' '{' S'}' EIF|
+    //     'function' ID(ID) '{' S R '}'
     AS AS()
     {
         C c;
         S s;
+        R r;
         EIF eif;
 
         if (lookahead.Type == (int)type.ID)
@@ -238,6 +240,22 @@ public class Parser
             Match(type.CLOSE_CURLY);
             return new AS(c, s);
         }
+        else if (lookahead.Type == (int)type.FUNCTION)
+        {
+            Match(type.FUNCTION);
+            String functionNAme = lookahead.Value;
+            Match(type.ID);
+            Match(type.OPEN_PAR);
+            String argument = lookahead.Value;
+            Match(type.ID);
+            Match(type.CLOSE_PAR);
+            Match(type.OPEN_CURLY);
+            s = S();
+            r = R();
+            Match(type.CLOSE_CURLY);
+            return new AS(functionNAme, argument, s, r);
+
+        }
         else
         {
             Match(type.IF);
@@ -252,6 +270,15 @@ public class Parser
             return new AS(c, s, eif);
 
         }
+    }
+    //R -> 'return' E ';'
+    R R()
+    {
+        E e;
+        Match(type.RETURN);
+        e = E();
+        Match(type.SEMICOLON);
+        return new R(e);
     }
     //EIF -> 'else' '{' S '}' | epsilon
     EIF EIF()
@@ -389,6 +416,7 @@ public class Parser
 
     protected void Match(type t)
     {
+       // Console.WriteLine((int)t);
         Debug.Assert(lookahead.Type == (int)t, "Syntax error");
         lookahead = this.t.nextToken();
     }

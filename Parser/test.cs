@@ -8,7 +8,7 @@ class Test
     {
         Console.WriteLine("Start parsing...");
         //String expr = Console.ReadLine();
-        String expr = "x:=0;y:=0;while(x<11){y:=y+1;x:=x+1;};";
+        String expr = "x := 0 ; y := 0; while ( x < 11){y:=y+1;x:=x+1;};function piopo(x){x:=x+1;return x;};";
         //String expr = "x:=5;if(x=6)then{y:=x;}else{x:=0;y:=55;};";
         //String expr = "x:=6;if(x=6)then{y:=x;};";
         showToken(expr);
@@ -23,7 +23,7 @@ class Test
         Parser p = new Parser();
         P program = p.parse(expr);
         Environment env = new Environment();
-        env = p.eval(program,env);
+        //env = p.eval(program,env);
         Console.WriteLine("Finish parsing...");
     }
 
@@ -83,6 +83,8 @@ class Test
             case 22: return "LT";
             case 23: return "EQUAL";
             case 24: return "DISEQUAL";
+            case 25: return "FUNCTION";
+            case 26: return "RETURN";
             default: return null;
         }
         

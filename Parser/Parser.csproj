@@ -51,6 +51,7 @@
     <Compile Include="PAR.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="P.cs" />
+    <Compile Include="R.cs" />
     <Compile Include="S1.cs" />
     <Compile Include="SEMICOLON.cs" />
     <Compile Include="S.cs" />
