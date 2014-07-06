@@ -51,7 +51,6 @@
     <Compile Include="PAR.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="P.cs" />
-    <Compile Include="R.cs" />
     <Compile Include="S1.cs" />
     <Compile Include="SEMICOLON.cs" />
     <Compile Include="S.cs" />
@@ -60,6 +59,8 @@
     <Compile Include="test.cs" />
     <Compile Include="Token.cs" />
     <Compile Include="Tokenizer.cs" />
+    <Compile Include="X.cs" />
+    <Compile Include="Y.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

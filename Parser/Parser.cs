@@ -77,6 +77,11 @@ public class Parser
                     }
                     else break;
                 }
+                if (assign.comcode.value == "return")
+                {
+                    env = eval(assign.e, env);
+                    break;
+                }
                 break;
                                
             case "EIF":
@@ -197,7 +202,7 @@ public class Parser
     //S -> AS S1 | epsilon
     S S()
     {
-        if (lookahead.Type == (int)type.ID | lookahead.Type == (int)type.WHILE | lookahead.Type == (int)type.IF | lookahead.Type == (int)type.FUNCTION)
+        if (lookahead.Type == (int)type.ID | lookahead.Type == (int)type.WHILE | lookahead.Type == (int)type.IF | lookahead.Type == (int)type.FUNCTION | lookahead.Type == (int)type.RETURN)
         {
             return new S(AS(), S1());
         }
@@ -211,24 +216,26 @@ public class Parser
         return new S1(S());
 
     }
-    //AS -> ID ':=' E |
+    //AS -> ID X
     //     'while' '(' C ')' '{' S '}'|
     //     'if' '(' C ')' 'then' '{' S'}' EIF|
-    //     'function' ID(ID) '{' S R '}'
+    //     'function' ID(ID) '{' S  '}'
+    //     'return' E 
     AS AS()
     {
         C c;
         S s;
-        R r;
+        
         EIF eif;
+        
 
         if (lookahead.Type == (int)type.ID)
         {
             String value = lookahead.Value;
             Match(type.ID);
-            Match(type.ASSIGN);
-            return new AS(E(), value);
+            return new AS(X(), value);
         }
+
         else if (lookahead.Type == (int)type.WHILE)
         {
             Match(type.WHILE);
@@ -251,12 +258,11 @@ public class Parser
             Match(type.CLOSE_PAR);
             Match(type.OPEN_CURLY);
             s = S();
-            r = R();
             Match(type.CLOSE_CURLY);
-            return new AS(functionNAme, argument, s, r);
+            return new AS(functionNAme, argument, s);
 
         }
-        else
+        else if (lookahead.Type == (int)type.IF)
         {
             Match(type.IF);
             Match(type.OPEN_PAR);
@@ -270,16 +276,45 @@ public class Parser
             return new AS(c, s, eif);
 
         }
+        else
+        {
+            Match(type.RETURN);
+            return new AS(E());
+        }
     }
-    //R -> 'return' E ';'
-    R R()
+    //X -> ':=' E Y | (ID)
+    
+    X X()
     {
-        E e;
-        Match(type.RETURN);
-        e = E();
-        Match(type.SEMICOLON);
-        return new R(e);
+        
+        if (lookahead.Type == (int)type.ASSIGN)
+        {
+            Match(type.ASSIGN);
+            return new X(E(),Y());
+        }
+        else
+        {
+            Match(type.OPEN_PAR);
+            String value = lookahead.Value;
+            Match(type.ID);
+            Match(type.CLOSE_PAR);
+            return new X(value);
+        }
     }
+    //Y -> (ID) | epsilon
+    Y Y()
+    {
+        if (lookahead.Type == (int)type.OPEN_PAR)
+        {
+            Match(type.OPEN_PAR);
+            String value = lookahead.Value;
+            Match(type.ID);
+            Match(type.CLOSE_PAR);
+            return new Y(value);
+        }
+        else return null;
+    }
+    
     //EIF -> 'else' '{' S '}' | epsilon
     EIF EIF()
     {

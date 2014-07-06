@@ -111,10 +111,11 @@ public class Tokenizer
                 string str = s[idx].ToString() + s[idx + 1].ToString();
                 t = new Token(str, (int)type.DISEQUAL);
                 idx += 2;
+                ignoreBlanks = true;
             }
             else
             {
-
+                ignoreBlanks = false;
                 t = new Token(s[idx++].ToString(), (int)type.INVALID_TOKEN);
             }
         }

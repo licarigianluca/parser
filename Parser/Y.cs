@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-    public class R
+    public class Y
     {
-        public E e;
+        public String ID;
 
-        public R(E e)
+        public Y(String ID)
         {
-            this.e = e;
+            this.ID = ID;
         }
     }
 

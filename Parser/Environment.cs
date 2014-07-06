@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 public class Environment
 {
     private Dictionary<String, int> env;
+    private Dictionary<String, S> functionEnv;
     private Stack<int> executionStack;
     
     public Environment()

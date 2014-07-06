@@ -8,13 +8,12 @@ class Test
     {
         Console.WriteLine("Start parsing...");
         //String expr = Console.ReadLine();
-        String expr = "x := 0 ; y := 0; while ( x < 11){y:=y+1;x:=x+1;};function piopo(x){x:=x+1;return x;};";
+        //String expr = "x := 0 ; y := 0; while ( z < 11){y:=y+1;x:=x+1;};";
+        String expr = "function pippo(x){x:=x+1;return x;};f:=pippo(y);return f;";
         //String expr = "x:=5;if(x=6)then{y:=x;}else{x:=0;y:=55;};";
         //String expr = "x:=6;if(x=6)then{y:=x;};";
         showToken(expr);
         parseExpr(expr);
-
-
     }
 
     private static void parseExpr(String expr)
@@ -23,7 +22,7 @@ class Test
         Parser p = new Parser();
         P program = p.parse(expr);
         Environment env = new Environment();
-        //env = p.eval(program,env);
+        env = p.eval(program,env);
         Console.WriteLine("Finish parsing...");
     }
 
