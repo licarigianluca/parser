@@ -1,0 +1,53 @@
+﻿P -> S 'EOF'
+
+S -> AS S1 | epsilon
+
+S1 -> ';' S
+
+AS -> ID X
+      'while' '(' C ')' '{' S '}'|
+      'if' '(' C ')' 'then' '{' S'}' EIF|
+      'function' ID(ID) '{' S  '}'
+      'return' E 
+
+X -> ':=' E Y | (AR)
+
+
+AR -> A | epsilon
+
+A -> ID A1 
+
+A1 -> ',' A| epsilon
+
+Y -> (ID) | epsilon
+
+EIF -> 'else' '{' S '}' | epsilon
+
+
+C -> E C1
+
+C1 ->   '<'  E |
+	'>'  E |
+	'='  E |
+	'>=' E |		no
+	'<=' E |		no
+	'!=' E |
+
+
+
+
+E -> T E1
+
+E1 -> '+' T E1 | 
+      '-' T E1 |
+      epsilon
+
+T -> F T1
+
+T1 -> '*' F T1 |
+      '/' F T1 |
+      epsilon
+
+F -> '(' E ')' |
+        ID     |
+        NUM
